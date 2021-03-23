@@ -12,7 +12,6 @@ function Footer() {
   const handleChange = useCallback(
     (event) => {
       setContent(event.target.value);
-      console.log(event.target.value);
     },
     [setContent]
   );
@@ -21,8 +20,6 @@ function Footer() {
     (event) => {
       event.preventDefault();
       if (content.length > 1) {
-        // signIn({ nick: nickName });
-        console.log('submit', content);
         postComment({
           name: nick,
           content,
@@ -37,7 +34,6 @@ function Footer() {
     <Container>
       <main>
         <form onSubmit={handleSubmit}>
-          {console.log('comments', comments)}
           <CustomInput type="text" value={content} onChange={handleChange} />
           <CustomButton type="submit">SEND</CustomButton>
         </form>

@@ -3,48 +3,84 @@ import React, {
   useCallback,
   useState,
   useContext,
-  useMemo,
+  useEffect,
 } from 'react';
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
+const GET_COMMENTS = gql`
+  query {
+    comments {
+      id
+      name
+      content
+      createdAt
+    }
+  }
+`;
+
+const POST_COMMENT = gql`
+  mutation saveComment($name: String!, $content: String!) {
+    saveComment(input: { name: $name, content: $content }) {
+      id
+      name
+      content
+      createdAt
+    }
+  }
+`;
+
+const COMMENTS_SUBSCRIPTION = gql`
+  subscription feedComments {
+    feedComments {
+      id
+      name
+      content
+      createdAt
+    }
+  }
+`;
 
 const CommentsContext = createContext({});
 
 export const CommentsProvider = ({ children }) => {
-  const mock = useMemo(() => {
-    return [
-      {
-        id: 1234556,
-        name: 'doug',
-        content: 'Teste comments',
-        createdAt: new Date(),
-      },
-      {
-        id: 1234556,
-        name: 'Jões',
-        content: 'Teste comments 2',
-        createdAt: new Date(),
-      },
-      {
-        id: 1234556,
-        name: 'Maria',
-        content: 'Teste comments 3',
-        createdAt: new Date(),
-      },
-    ];
-  }, []);
+  const { loading, error, data: backData, refetch, subscribeToMore } = useQuery(
+    GET_COMMENTS
+  );
+  const [sendComment] = useMutation(POST_COMMENT);
+  // const { data: subData, loading: subLoading } = useSubscription(
+  //   COMMENTS_SUBSCRIPTION
+  // );
 
-  const [data, setData] = useState(mock);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (!loading) {
+      setData(backData.comments);
+    }
+  }, [backData, loading, setData]);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: COMMENTS_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        return setData([...data, subscriptionData.data.feedComments]);
+      },
+    });
+  }, [data, subscribeToMore]);
 
   const postComment = useCallback(
     async (comment) => {
-      const newComment = {
-        id: 12323,
-        name: comment.name,
-        content: comment.content,
-        createdAt: new Date(),
-      };
-      setData([...data, newComment]);
+      await sendComment({
+        variables: {
+          name: comment.name,
+          content: comment.content,
+        },
+      });
+      refetch();
     },
-    [data]
+    [sendComment, refetch]
   );
 
   return (

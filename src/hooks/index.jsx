@@ -2,10 +2,13 @@ import React from 'react';
 
 import { NickNameProvider } from './nickName';
 import { CommentsProvider } from './comments';
+import { OnlineProvider } from './online';
 
 const AppProvider = ({ children }) => (
   <NickNameProvider>
-    <CommentsProvider>{children}</CommentsProvider>
+    <OnlineProvider>
+      <CommentsProvider>{children}</CommentsProvider>
+    </OnlineProvider>
   </NickNameProvider>
 );
 

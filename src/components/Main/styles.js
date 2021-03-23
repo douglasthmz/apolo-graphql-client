@@ -5,10 +5,12 @@ export const Container = styled.div`
   padding-bottom: 9vh;
   padding-left: 20px;
   height: 100%;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
+  /* overflow-y: scroll; */
 `;
 export const CommentCard = styled.div`
   display: flex;

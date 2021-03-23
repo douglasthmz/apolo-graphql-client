@@ -9,4 +9,5 @@ export const Container = styled.div`
   background-color: #eaeeef;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* overflow-y: scroll; */
 `;

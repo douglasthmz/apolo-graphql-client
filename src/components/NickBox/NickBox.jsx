@@ -24,7 +24,6 @@ function NickBox() {
   const handleChange = useCallback(
     (event) => {
       setNickName(event.target.value);
-      console.log(event.target.value);
     },
     [setNickName]
   );

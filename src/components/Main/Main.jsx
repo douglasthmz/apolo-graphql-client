@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 import { Container, CommentCard, CommentName, CommentContent } from './styles';
 import { useComments } from '../../hooks/comments';
