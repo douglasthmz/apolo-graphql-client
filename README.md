@@ -16,10 +16,6 @@ Após isso, basta rodar o comando:
 
 Endereço da aplicação: `http://localhost:3000`
 
-Rodando testes:
-
-`npm run test`
-
 ### Escolhas técnicas
 
 O Bootstrap da aplicação foi feita através do boilerplate create-react-app.
